@@ -12,21 +12,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
-# Function to categorize AQI and return a bitmoji URL or emoji
-def get_aqi_category(aqi):
-    if aqi <= 50:
-        return "Good 😊"
-    elif 51 <= aqi <= 100:
-        return "Moderate 😐"
-    elif 101 <= aqi <= 150:
-        return "Unhealthy for Sensitive Groups 😷"
-    elif 151 <= aqi <= 200:
-        return "Unhealthy 😟"
-    elif 201 <= aqi <= 300:
-        return "Very Unhealthy 😨"
-    else:
-        return "Hazardous ☠️"
-
 # Set the page title
 st.title("Air Quality Index (AQI) Prediction")
 
@@ -123,11 +108,6 @@ if uploaded_file is not None:
             user_input_scaled = scaler.transform([user_input])
             predicted_aqi = model.predict(user_input_scaled)[0]
             st.write(f"Predicted AQI: {predicted_aqi:.2f}")
-
-            # Categorize AQI and display bitmoji
-            category, bitmoji_url = get_aqi_category(predicted_aqi)
-            st.write(f"AQI Category: {category}")
-            st.image(bitmoji_url, caption=category)
     else:
         st.error("The dataset does not contain the required columns.")
 else:
