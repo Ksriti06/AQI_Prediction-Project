@@ -112,6 +112,13 @@ if uploaded_file is not None:
 
         if st.button("Predict AQI"):
             try:
+                # Dynamically compute derived features
+                PM_Ratio = user_input[0] / (user_input[1] + 1)  # PM2.5 / (PM10 + 1)
+                NO_Ratio = user_input[2] / (user_input[3] + 1)  # NO / (NO2 + 1)
+
+                # Append the derived features to the input
+                user_input.extend([PM_Ratio, NO_Ratio])
+
                 # Ensure the user input matches the scaler's expected dimensions
                 user_input_array = np.array(user_input).reshape(1, -1)  # Convert to 2D array
                 user_input_scaled = scaler.transform(user_input_array)  # Scale the input
