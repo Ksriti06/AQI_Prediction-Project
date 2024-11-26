@@ -103,11 +103,23 @@ if uploaded_file is not None:
 
         # Allow user to input AQI values for prediction
         st.subheader("Predict AQI for Custom Input")
-        user_input = [st.number_input(f"Enter value for {col}", value=0.0) for col in selected_columns]
+        st.write("Enter the following values for prediction:")
+
+        # Capture user inputs for each feature
+        user_input = [
+            st.number_input(f"Enter value for {col}", value=0.0) for col in selected_columns
+        ]
+
         if st.button("Predict AQI"):
-            user_input_scaled = scaler.transform([user_input])
-            predicted_aqi = model.predict(user_input_scaled)[0]
-            st.write(f"Predicted AQI: {predicted_aqi:.2f}")
+            try:
+                # Ensure the user input matches the scaler's expected dimensions
+                user_input_array = np.array(user_input).reshape(1, -1)  # Convert to 2D array
+                user_input_scaled = scaler.transform(user_input_array)  # Scale the input
+                predicted_aqi = model.predict(user_input_scaled)[0]  # Predict AQI
+
+                st.success(f"Predicted AQI: {predicted_aqi:.2f}")
+            except ValueError as e:
+                st.error(f"Error in prediction: {e}")
     else:
         st.error("The dataset does not contain the required columns.")
 else:
